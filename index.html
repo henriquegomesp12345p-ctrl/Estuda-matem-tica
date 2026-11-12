@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="Aprenda matemática do básico ao avançado com aulas e desafios.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <title>Estuda-Matemática</title>
+  <style>
+    :root{color-scheme:dark;--bg:#06101f;--panel:#0d1d35;--panel2:#102746;--cyan:#38d9ff;--blue:#527bff;--text:#eef6ff;--muted:#a9bdd6;--green:#58e6b1}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#173b67 0,transparent 34%),var(--bg);color:var(--text);font:16px system-ui, sans-serif;min-height:100vh}
+    header{padding:25px 20px 18px;max-width:850px;margin:auto} .eyebrow{color:var(--cyan);font-size:12px;letter-spacing:2px;font-weight:800}
+    h1{font-size:clamp(27px,7vw,40px);margin:8px 0}p{color:var(--muted);line-height:1.5}
+    main{max-width:850px;margin:auto;padding:0 16px 100px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 18px}
+    .stat,.panel,.tile{background:linear-gradient(145deg,#102744,#0b1a30);border:1px solid #234365;border-radius:18px;padding:15px}
+    .stat strong{display:block;font-size:23px;color:var(--cyan)}.stat span{font-size:12px;color:var(--muted)}
+    .panel{margin:14px 0}.panel h2{margin:0 0 8px;font-size:20px}.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .tile{cursor:pointer;text-align:left;color:var(--text);font:inherit;min-height:112px}.tile b{display:block;margin-bottom:7px}.tile small{color:var(--muted)}
+    button{border:0}.primary{background:linear-gradient(90deg,#246dff,#14bce9);color:white;padding:13px 17px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer}
+    .secondary{background:#183553;color:#dff5ff;padding:11px 14px;border-radius:11px;margin:5px 5px 5px 0;cursor:pointer}
+    .nav{position:fixed;bottom:0;left:0;right:0;background:#08172aee;backdrop-filter:blur(12px);border-top:1px solid #234365;display:flex;justify-content:center;gap:8px;padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+    .nav button{background:transparent;color:var(--muted);padding:9px 13px;border-radius:10px;font-weight:700}.nav button.active{background:#123c5a;color:var(--cyan)}
+    .hidden{display:none}.question{font-size:21px;font-weight:800;margin:15px 0}.feedback{min-height:26px;color:var(--green);font-weight:700}
+    .progress{height:10px;background:#1c3551;border-radius:99px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0}
+    .lesson{border-bottom:1px solid #234365;padding:12px 0}.lesson:last-child{border:0}
+    @media(min-width:650px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">ACADEMIA DIGITAL • MATEMÁTICA</div>
+  <h1>Estuda-Matemática <span aria-hidden="true">✦</span></h1>
+  <p>Do primeiro cálculo até os desafios avançados. Aprenda no seu ritmo.</p>
+</header>
+<main>
+  <section id="home">
+    <div class="stats">
+      <div class="stat"><strong id="xp">0</strong><span>XP conquistados</span></div>
+      <div class="stat"><strong id="level">1</strong><span>Seu nível</span></div>
+      <div class="stat"><strong id="done">0</strong><span>Desafios certos</span></div>
+    </div>
+    <div class="panel">
+      <h2>Seu progresso</h2><p id="progressText">Faltam 50 XP para o próximo nível.</p>
+      <div class="progress"><div id="bar"></div></div>
+    </div>
+    <div class="panel">
+      <h2>Escolha uma área</h2>
+      <div class="tiles">
+        <button class="tile" onclick="showArea('Aritmética')"><b>➕ Aritmética</b><small>Contas, frações e porcentagem</small></button>
+        <button class="tile" onclick="showArea('Álgebra')"><b>📐 Álgebra</b><small>Expressões e equações</small></button>
+        <button class="tile" onclick="showArea('Geometria')"><b>🔷 Geometria</b><small>Formas, áreas e volumes</small></button>
+        <button class="tile" onclick="showArea('Avançada')"><b>🚀 Avançada</b><small>Funções e cálculo</small></button>
+      </div>
+    </div>
+    <div class="panel"><h2>Desafio rápido</h2><p>Quanto é 7 + 5?</p><button class="primary" onclick="showTab('challenge')">Responder desafio</button></div>
+  </section>
+  <section id="lessons" class="hidden">
+    <div class="panel"><h2 id="areaTitle">Aulas</h2><p>Comece pelo primeiro assunto e avance quando estiver confiante.</p><div id="lessonList"></div></div>
+  </section>
+  <section id="challenge" class="hidden">
+    <div class="panel"><div class="eyebrow">DESAFIO • NÍVEL INICIANTE</div><h2>Vamos praticar!</h2><div class="question">Quanto é 7 + 5?</div>
+      <button class="secondary" onclick="answer(10)">A) 10</button><button class="secondary" onclick="answer(12)">B) 12</button><button class="secondary" onclick="answer(13)">C) 13</button><button class="secondary" onclick="answer(14)">D) 14</button>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+  <section id="progress" class="hidden"><div class="panel"><h2>Seu progresso</h2><p id="progressDetail">Você está começando sua jornada!</p><button class="secondary" onclick="resetProgress()">Zerar progresso</button></div></section>
+</main>
+<nav class="nav" aria-label="Navegação">
+  <button class="active" data-tab="home" onclick="showTab('home')">⌂ Início</button>
+  <button data-tab="lessons" onclick="showTab('lessons')">▤ Aulas</button>
+  <button data-tab="challenge" onclick="showTab('challenge')">✦ Desafios</button>
+  <button data-tab="progress" onclick="showTab('progress')">◷ Progresso</button>
+</nav>
+<script>
+const areas={
+'Aritmética':['Números naturais','Adição e subtração','Multiplicação e divisão','Frações','Números decimais','Porcentagem'],
+'Álgebra':['O que são variáveis?','Expressões algébricas','Equações do 1º grau','Equações do 2º grau','Sistemas de equações'],
+'Geometria':['Pontos, retas e ângulos','Triângulos e quadriláteros','Perímetro e área','Circunferência','Volume dos sólidos'],
+'Avançada':['Plano cartesiano','Funções','Potenciação e logaritmos','Trigonometria','Introdução ao cálculo']
+};
+let xp=Number(localStorage.getItem('xp')||0),done=Number(localStorage.getItem('done')||0),answered=false;
+function save(){localStorage.setItem('xp',xp);localStorage.setItem('done',done);update()}
+function update(){document.getElementById('xp').textContent=xp;document.getElementById('level').textContent=Math.floor(xp/50)+1;document.getElementById('done').textContent=done;let n=xp%50;document.getElementById('bar').style.width=(n*2)+'%';document.getElementById('progressText').textContent=(50-n)+' XP para o próximo nível.';document.getElementById('progressDetail').textContent=`Você conquistou ${xp} XP e acertou ${done} desafio(s). Continue praticando!`}
+function showTab(tab){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(tab).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));}
+function showArea(name){document.getElementById('areaTitle').textContent=name;document.getElementById('lessonList').innerHTML=areas[name].map((x,i)=>`<div class="lesson"><b>${i+1}. ${x}</b><p>Leia o assunto, pratique com exemplos e avance no seu ritmo.</p></div>`).join('');showTab('lessons')}
+function answer(v){if(answered)return;answered=true;let f=document.getElementById('feedback');if(v===12){f.textContent='Muito bem! Você ganhou 10 XP!';xp+=10;done++;save()}else{f.textContent='Quase! A resposta correta é 12. Tente novamente depois.'}}
+function resetProgress(){if(confirm('Tem certeza que deseja zerar seu progresso?')){xp=0;done=0;save()}}
+update();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
+</body></html>
